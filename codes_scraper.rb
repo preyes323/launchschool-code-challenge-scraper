@@ -4,9 +4,9 @@ class CodeChallengeScraper
   attr_reader :agent, :user_name, :password
   attr_accessor :page, :form
 
-  def initialize(page = 'https://launchschool.com/')
+  def initialize(homepage = 'https://launchschool.com/')
     @agent = Mechanize.new
-    @page = agent.get(page)
+    @page = agent.get(homepage)
   end
 
   def load(email, password, challenge)
@@ -14,17 +14,6 @@ class CodeChallengeScraper
     login(email, password)
     click_link('Challenges and Live Sessions')
     click_link(challenge)
-  end
-
-  def click_link(link = 'Sign In')
-    self.page = agent.page.link_with(:text => link).click
-  end
-
-  def login(email, password, form_name = nil)
-    self.form = form_name ? page.form(form_name) : page.form()
-    self.form.email = email
-    self.form.password = password
-    self.page = agent.submit(form)
   end
 
   def write_solutions_to_files
@@ -38,6 +27,19 @@ class CodeChallengeScraper
       text_doc.text =~ /Solution/ ? encode_text(text_doc, solution_count) : break
       solution_count += 1
     end
+  end
+
+  private
+
+  def click_link(link = 'Sign In')
+    self.page = agent.page.link_with(:text => link).click
+  end
+
+  def login(email, password, form_name = nil)
+    self.form = form_name ? page.form(form_name) : page.form()
+    self.form.email = email
+    self.form.password = password
+    self.page = agent.submit(form)
   end
 
   def encode_text(text_doc, solution_count)
