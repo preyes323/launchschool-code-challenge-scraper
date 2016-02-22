@@ -1,9 +1,5 @@
 require_relative 'codes_scraper.rb'
 
 meetup_challenge = CodeChallengeScraper.new
-begin
-  meetup_challenge.load('email', 'password', '02/13/16 - Challenge: Meetup')
-  meetup_challenge.write_solutions_to_files
-rescue
-  puts 'Please check your inputs: email, password, and challenge to load'
-end
+meetup_challenge.go_to_challenge_page('vpaoloreyes@gmail.com', 'Rachelle_0329', 'https://launchschool.com/gists/9ba29fa3')
+meetup_challenge.write_solutions_to_files

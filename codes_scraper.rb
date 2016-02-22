@@ -16,6 +16,12 @@ class CodeChallengeScraper
     click_link(challenge)
   end
 
+  def go_to_challenge_page(email, password, page)
+    click_link
+    login(email, password)
+    self.page = agent.get(page)
+  end
+
   def write_solutions_to_files
     html = page.body
     html_doc = Nokogiri::HTML(html)
